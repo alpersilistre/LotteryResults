@@ -4,6 +4,7 @@ const axios = require('axios');
 const path = require('path');
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '/site')));
 
@@ -12,7 +13,10 @@ app.listen('3000', () => {
 });
 
 app.get('/piyango', (req, res) => {
-    axios.get('http://www.millipiyango.gov.tr/sonuclar/cekilisler/piyango/20171129.json').
+    const date = req.query.selectedDate;
+    console.log(date);
+    let url = `http://www.millipiyango.gov.tr/sonuclar/cekilisler/piyango/${date}.json`;
+    axios.get(url).
         then((response) => {
             res.send(response.data);
         }).catch((err) => {
