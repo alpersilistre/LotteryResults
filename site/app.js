@@ -35,29 +35,28 @@ $(document).ready(() => {
                     dataType: 'json',
                     data: { "selectedDate": selectedDate },
                     success: function(res) {
+                        let numbersArray = [];
                         console.log(res.sonuclar);
                         let results = res.sonuclar;
-                        let sevenNumbers = _.filter(results, (item) => { return item.haneSayisi === 7; });
-                        let sixNumbers = _.filter(results, (item) => { return item.haneSayisi === 6; });
-                        let fiveNumbers = _.filter(results, (item) => { return item.haneSayisi === 5; });
-                        let fourNumbers = _.filter(results, (item) => { return item.haneSayisi === 4; });
-                        let threeNumbers = _.filter(results, (item) => { return item.haneSayisi === 3; });
-                        let twoNumbers = _.filter(results, (item) => { return item.haneSayisi === 2; });
-                        let oneNumbers = _.filter(results, (item) => { return item.haneSayisi === 1; });
-
+                        numbersArray = arrangeNumbers(results);
                         let resultText;
-                        sevenNumbers.forEach(x => {
-                            x.numaralar.forEach(y => {
-                                if(Number(y) === ticketNumber) {
-                                    resultText = `${ticketNumber} numaralı biletiniz ${x.ikramiye.format()} TL ikramiye kazandı.`;
-                                    // console.log(resultText);
-                                    $('#priceInfo').text(resultText);
-                                    priceAlert.removeClass('hidden');
-                                    return;
-                                }
-                            })
+                        numbersArray.forEach(arr => {
+                            arr.forEach(x => {
+                                x.numaralar.forEach(y => {
+                                    if(results[0].haneSayisi === 7) {
+                                        let subtractNumber = 7 - x.haneSayisi;
+                                        let ticket = ticketNumber.toString().substring(subtractNumber);
+                                        if(Number(y) === Number(ticket)) {
+                                            resultText = `${ticketNumber} numaralı biletiniz ${x.ikramiye.format()} TL ikramiye kazandı.`;
+                                            // console.log(resultText);
+                                            $('#priceInfo').text(resultText);
+                                            priceAlert.removeClass('hidden');
+                                            return;
+                                        }
+                                    }                                    
+                                })
+                            });
                         });
-
                         resultText = `${ticketNumber} numaralı biletinize ikramiye isabet etmemiştir.`;
                         $('#failInfo').text(resultText);
                         failAlert.removeClass('hidden');
@@ -72,6 +71,26 @@ $(document).ready(() => {
 
         
     });
+
+    function arrangeNumbers(results) {
+        let numbersArray = [];
+        let sevenNumbers = _.filter(results, (item) => { return item.haneSayisi === 7; });
+        numbersArray.push(sevenNumbers);
+        let sixNumbers = _.filter(results, (item) => { return item.haneSayisi === 6; });
+        numbersArray.push(sixNumbers);
+        let fiveNumbers = _.filter(results, (item) => { return item.haneSayisi === 5; });
+        numbersArray.push(fiveNumbers);
+        let fourNumbers = _.filter(results, (item) => { return item.haneSayisi === 4; });
+        numbersArray.push(fourNumbers);
+        let threeNumbers = _.filter(results, (item) => { return item.haneSayisi === 3; });
+        numbersArray.push(threeNumbers);
+        let twoNumbers = _.filter(results, (item) => { return item.haneSayisi === 2; });
+        numbersArray.push(twoNumbers);
+        let oneNumbers = _.filter(results, (item) => { return item.haneSayisi === 1; });
+        numbersArray.push(oneNumbers);
+
+        return numbersArray;
+    }
 
     $('#resultList').on('changed.bs.select', function (e) {
         let selectedItem = $(this);
