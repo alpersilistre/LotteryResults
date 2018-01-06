@@ -40,27 +40,44 @@ $(document).ready(() => {
                         let results = res.sonuclar;
                         numbersArray = arrangeNumbers(results);
                         let resultText;
-                        numbersArray.forEach(arr => {
-                            arr.forEach(x => {
-                                x.numaralar.forEach(y => {
+                        for(let i = 0; i < numbersArray.length; i++){
+                            let arr = numbersArray[i];
+                            for(let j = 0; j < arr.length; j++){
+                                let numbers = arr[j].numaralar;
+                                for(let k = 0; k < numbers.length; k++){
                                     if(results[0].haneSayisi === 7) {
-                                        let subtractNumber = 7 - x.haneSayisi;
+                                        let subtractNumber = 7 - arr[j].haneSayisi;
                                         let ticket = ticketNumber.toString().substring(subtractNumber);
-                                        if(Number(y) === Number(ticket)) {
-                                            resultText = `${ticketNumber} numaralı biletiniz ${x.ikramiye.format()} TL ikramiye kazandı.`;
-                                            // console.log(resultText);
+                                        if(Number(numbers[k]) === Number(ticket)) {
+                                            resultText = `${ticketNumber} numaralı biletiniz ${arr[j].ikramiye.format()} TL ikramiye kazandı.`;
                                             $('#priceInfo').text(resultText);
                                             priceAlert.removeClass('hidden');
                                             return;
                                         }
-                                    }                                    
-                                })
-                            });
-                        });
+                                    }
+                                }
+                            }
+                        }
                         resultText = `${ticketNumber} numaralı biletinize ikramiye isabet etmemiştir.`;
                         $('#failInfo').text(resultText);
                         failAlert.removeClass('hidden');
-
+                        // numbersArray.forEach(arr => {
+                        //     arr.forEach(x => {
+                        //         x.numaralar.forEach(y => {
+                        //             if(results[0].haneSayisi === 7) {
+                        //                 let subtractNumber = 7 - x.haneSayisi;
+                        //                 let ticket = ticketNumber.toString().substring(subtractNumber);
+                        //                 if(Number(y) === Number(ticket)) {
+                        //                     resultText = `${ticketNumber} numaralı biletiniz ${x.ikramiye.format()} TL ikramiye kazandı.`;
+                        //                     // console.log(resultText);
+                        //                     $('#priceInfo').text(resultText);
+                        //                     priceAlert.removeClass('hidden');
+                        //                     break;
+                        //                 }
+                        //             }                                    
+                        //         })
+                        //     });
+                        // });
                     },
                     error: function(err) {
                         console.log(err);
