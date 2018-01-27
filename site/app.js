@@ -18,7 +18,9 @@ $(document).ready(() => {
 
     $('#submitButton').click(function(e) {
         e.preventDefault();
-        
+        priceAlert.addClass('hidden');
+        failAlert.addClass('hidden');
+
         if(selectedDate === undefined || selectedDate === '0') {
             $('#alertError').text('Lütfen bir tarih seçiniz');
             dateAlert.removeClass('hidden');
@@ -61,23 +63,6 @@ $(document).ready(() => {
                         resultText = `${ticketNumber} numaralı biletinize ikramiye isabet etmemiştir.`;
                         $('#failInfo').text(resultText);
                         failAlert.removeClass('hidden');
-                        // numbersArray.forEach(arr => {
-                        //     arr.forEach(x => {
-                        //         x.numaralar.forEach(y => {
-                        //             if(results[0].haneSayisi === 7) {
-                        //                 let subtractNumber = 7 - x.haneSayisi;
-                        //                 let ticket = ticketNumber.toString().substring(subtractNumber);
-                        //                 if(Number(y) === Number(ticket)) {
-                        //                     resultText = `${ticketNumber} numaralı biletiniz ${x.ikramiye.format()} TL ikramiye kazandı.`;
-                        //                     // console.log(resultText);
-                        //                     $('#priceInfo').text(resultText);
-                        //                     priceAlert.removeClass('hidden');
-                        //                     break;
-                        //                 }
-                        //             }                                    
-                        //         })
-                        //     });
-                        // });
                     },
                     error: function(err) {
                         console.log(err);
@@ -108,6 +93,18 @@ $(document).ready(() => {
 
         return numbersArray;
     }
+
+    selectedNumber.keyup(function(e){
+        let length = selectedNumber.val().length;
+        if(length > 7) {
+            $('#failInfo').text('Lütfen 7 den fazla rakam girmeyiniz.');
+            failAlert.removeClass('hidden');
+        }
+        else {
+            $('#failInfo').text('');
+            failAlert.addClass('hidden');
+        }
+    });
 
     $('#resultList').on('changed.bs.select', function (e) {
         let selectedItem = $(this);
